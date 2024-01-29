@@ -37,3 +37,6 @@ package-lock.json
 
 *.tsbuildinfo
 .vim
+
+# Node Modules
+node_modules
