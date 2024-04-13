@@ -12,16 +12,11 @@ import megaBrain from "../emojis/megabrain.gif";
 import QuestionComponent from "../questions/question";
 import ConfettiExplosion from "react-confetti-explosion";
 import { useNavigate } from "react-router-dom";
+import Header from "../header/header";
 
-export interface MainPageProps {
-  setIsLivingTheDream: (value: boolean) => void;
-  setIsFormSubmitted: (value: boolean) => void;
-}
+export interface MainPageProps {}
 
-export const MainPage: React.FC<MainPageProps> = ({
-  setIsLivingTheDream,
-  setIsFormSubmitted,
-}) => {
+export const MainPage: React.FC<MainPageProps> = () => {
   const [formState, setFormState] = useState({
     name: "",
     enjoySaying: "",
@@ -41,30 +36,27 @@ export const MainPage: React.FC<MainPageProps> = ({
     });
   };
 
-  // const handleSubmit = (event: React.FormEvent) => {
-  //   event.preventDefault();
-
-  //   setIsExploding(true);
-  //   setIsLivingTheDream(true);
-  //   setIsFormSubmitted(true);
-
-  //   // Wait for the duration of the confetti explosion before navigating
-  //   setTimeout(() => {
-  //     navigate("/dreamPage");
-  //   }, 2000);
-  // };
-
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    setIsExploding(false);
-    setIsLivingTheDream(false);
-    setIsFormSubmitted(true);
-    navigate("/nightmarePage");
+    setIsExploding(true);
+
+    // Wait for the duration of the confetti explosion before navigating
+    setTimeout(() => {
+      navigate("/dream");
+    }, 2000);
   };
+
+  // const handleSubmit = (event: React.FormEvent) => {
+  //   event.preventDefault();
+
+  //   setIsExploding(false);
+  //   navigate("/nightmare");
+  // };
 
   return (
     <>
+      <Header />
       <Box
         display="flex"
         justifyContent="center"

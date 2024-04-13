@@ -1,11 +1,15 @@
 import React from "react";
+import Header from "../header/header";
 
 const DreamPage: React.FC = () => {
   return (
-    <div>
-      <h1>Welcome to the Dream Page!</h1>
-      <p>You are living the dream!</p>
-    </div>
+    <>
+      <Header />
+      <div>
+        <h1>Welcome to the Dream Page!</h1>
+        <p>You are living the dream!</p>
+      </div>
+    </>
   );
 };
 
