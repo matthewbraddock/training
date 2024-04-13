@@ -13,10 +13,13 @@ import QuestionComponent from "../questions/question";
 import ConfettiExplosion from "react-confetti-explosion";
 import { useNavigate } from "react-router-dom";
 import Header from "../header/header";
+import { useAuth0 } from "@auth0/auth0-react";
 
-export interface MainPageProps {}
+export interface MainPageProps { }
 
 export const MainPage: React.FC<MainPageProps> = () => {
+  const { user } = useAuth0();
+
   const [formState, setFormState] = useState({
     name: "",
     enjoySaying: "",
@@ -76,7 +79,7 @@ export const MainPage: React.FC<MainPageProps> = () => {
         >
           <Grid container direction="column" alignItems="center" spacing={2}>
             <Grid item>
-              <TextField label="Name" name="name" onChange={handleChange} />
+              <TextField label="Name" name="name" defaultValue={user?.given_name} onChange={handleChange} />
             </Grid>
 
             <Grid item spacing={4}>
