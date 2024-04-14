@@ -1,4 +1,5 @@
-import { Box, Button, Grid, TextField } from "@material-ui/core";
+import { Box, Button, Grid, TextField, Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
 import "../emojis/emojis.css";
 import blobSweat from "../emojis/blob-sweat.gif";
@@ -7,30 +8,33 @@ import catJam from "../emojis/catjam.gif";
 import smart from "../emojis/smart.gif";
 import lil_wayne from "../emojis/lil_wayne.jpg";
 import wack from "../emojis/wack.jpg";
-import noBrain from "../emojis/no-brainer.png";
-import megaBrain from "../emojis/megabrain.gif";
 import QuestionComponent from "../questions/question";
 import ConfettiExplosion from "react-confetti-explosion";
 import { useNavigate } from "react-router-dom";
 import Header from "../header/header";
 import { useAuth0 } from "@auth0/auth0-react";
+import OneToTenQuestionComponent from "../questions/oneToTenQuestion";
 
-export interface MainPageProps {}
+export interface MainPageProps { }
 
 export const MainPage: React.FC<MainPageProps> = () => {
   const { user } = useAuth0();
+
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
 
   // Extract the user's first name from the user_metadata object for Database Login users
   const namespace = "https://myapp.example.com/claims/";
   const firstName = user?.[namespace + "user_metadata"]?.first_name || "";
 
-  const [formState, setFormState] = useState({
-    name: "",
+  const initialFormState = {
     enjoySaying: "",
     workedInPortal: "",
     goonGoblin: "",
-    learnedSomethingNew: "",
-  });
+    number: 0,
+  };
+
+  const [formState, setFormState] = useState(initialFormState);
+
 
   const navigate = useNavigate();
 
@@ -43,23 +47,45 @@ export const MainPage: React.FC<MainPageProps> = () => {
     });
   };
 
+  const handleNumberChange = (value: number) => {
+    setFormState({
+      ...formState,
+      'number': value,
+    });
+  };
+
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    setIsExploding(true);
+    const allQuestionsAnswered = Object.entries(formState).every(([key, value]) => {
+      return value !== initialFormState[key as keyof typeof initialFormState];
+    });
 
-    // Wait for the duration of the confetti explosion before navigating
-    setTimeout(() => {
-      navigate("/dream");
-    }, 2000);
+    if (!allQuestionsAnswered) {
+      setIsSnackbarOpen(true);
+      return;
+    }
+
+    // Check formState to decide which page to navigate to
+    if (formState.enjoySaying === 'no' ?? formState.workedInPortal === 'yes' ?? formState.goonGoblin === 'no' ?? formState.enjoySaying === 'no' ?? formState.number !== 3) {
+      navigate("/nightmare");
+    } else {
+      setIsExploding(true);
+      // Wait for the duration of the confetti explosion before navigating
+      setTimeout(() => {
+        navigate("/dream");
+      }, 1000);
+    }
   };
 
-  // const handleSubmit = (event: React.FormEvent) => {
-  //   event.preventDefault();
+  const handleSnackbarClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
 
-  //   setIsExploding(false);
-  //   navigate("/nightmare");
-  // };
+    setIsSnackbarOpen(false);
+  };
 
   return (
     <>
@@ -116,12 +142,10 @@ export const MainPage: React.FC<MainPageProps> = () => {
                 handleChange={handleChange}
                 formState={formState}
               />
-              <QuestionComponent
-                question="Did you learn something new today?"
-                rowName="learnedSomethingNew"
-                yesImage={megaBrain}
-                noImage={noBrain}
-                handleChange={handleChange}
+              <OneToTenQuestionComponent
+                question="How many seconds do you get before standup ends to add a final parking lot item?"
+                rowName="parkingLotTime"
+                handleNumberChange={handleNumberChange}
                 formState={formState}
               />
             </Grid>
@@ -130,6 +154,16 @@ export const MainPage: React.FC<MainPageProps> = () => {
               <Button type="submit" variant="contained">
                 Submit
               </Button>
+              <Snackbar
+                open={isSnackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              >
+                <Alert onClose={handleSnackbarClose} severity="error">
+                  Please answer all questions before submitting.
+                </Alert>
+              </Snackbar>
             </Grid>
           </Grid>
         </Box>

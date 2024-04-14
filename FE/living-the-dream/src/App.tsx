@@ -1,10 +1,10 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import MainPage from "./client/components/mainPage/mainPage";
 import NightmarePage from "./client/components/nightmarePage/nightmarePage";
 import DreamPage from "./client/components/dreamPage/dreamPage";
 import CallbackPage from "./client/components/callback/callbackPage";
 import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   const { isAuthenticated, loginWithRedirect, isLoading } = useAuth0();

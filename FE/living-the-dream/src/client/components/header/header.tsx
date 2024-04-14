@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { ReactComponent as MySvg } from "./header_image.svg";
-import { LogoutButton } from "../buttons/logoutButton";
+import { NavBarButtons } from "../navigation/nav-bar-buttons";
 
 const useStyles = makeStyles(() => ({
   header: {
@@ -33,7 +33,7 @@ const Header = () => {
       <header className={classes.header}>
         <MySvg className={classes.img} />
       </header>
-      <LogoutButton className={classes.logoutButton} />
+      <NavBarButtons />
     </div>
   );
 };
