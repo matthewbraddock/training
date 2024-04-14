@@ -15,10 +15,14 @@ import { useNavigate } from "react-router-dom";
 import Header from "../header/header";
 import { useAuth0 } from "@auth0/auth0-react";
 
-export interface MainPageProps { }
+export interface MainPageProps {}
 
 export const MainPage: React.FC<MainPageProps> = () => {
   const { user } = useAuth0();
+
+  // Extract the user's first name from the user_metadata object for Database Login users
+  const namespace = "https://myapp.example.com/claims/";
+  const firstName = user?.[namespace + "user_metadata"]?.first_name || "";
 
   const [formState, setFormState] = useState({
     name: "",
@@ -79,10 +83,15 @@ export const MainPage: React.FC<MainPageProps> = () => {
         >
           <Grid container direction="column" alignItems="center" spacing={2}>
             <Grid item>
-              <TextField label="Name" name="name" defaultValue={user?.given_name} onChange={handleChange} />
+              <TextField
+                label="Name"
+                name="name"
+                defaultValue={user?.given_name ?? firstName}
+                onChange={handleChange}
+              />
             </Grid>
 
-            <Grid item spacing={4}>
+            <Grid item>
               <QuestionComponent
                 question="Do you enjoy saying 'Let's gooooo!'?"
                 rowName="enjoySaying"
