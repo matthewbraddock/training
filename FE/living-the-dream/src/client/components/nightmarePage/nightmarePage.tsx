@@ -27,7 +27,7 @@ const NightmarePage: React.FC = () => {
       .then(response => response.json())
       .then(data => setQuote(data['0'].quote))
       .catch(error => console.error('Error:', error));
-  }, []);
+  }, [api_key]);
 
   return (
     <>
