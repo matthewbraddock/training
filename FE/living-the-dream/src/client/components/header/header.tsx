@@ -6,6 +6,8 @@ import { LogoutButton } from "../buttons/logoutButton";
 const useStyles = makeStyles(() => ({
   header: {
     display: "flex",
+    justifyContent: "space-between",
+    alignItems: "row",
     height: "30vh",
     border: "none",
     backgroundColor: "transparent",
@@ -18,16 +20,21 @@ const useStyles = makeStyles(() => ({
     objectFit: "cover",
     border: "none",
   },
+  logoutButton: {
+    order: 2,
+  },
 }));
 
 const Header = () => {
   const classes = useStyles();
 
   return (
-    <header className={classes.header}>
-      <MySvg className={classes.img} />
-      <LogoutButton />
-    </header>
+    <div>
+      <header className={classes.header}>
+        <MySvg className={classes.img} />
+      </header>
+      <LogoutButton className={classes.logoutButton} />
+    </div>
   );
 };
 
