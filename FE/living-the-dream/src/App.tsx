@@ -5,6 +5,7 @@ import CallbackPage from "./client/components/callback/callbackPage";
 import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Routes, Route } from "react-router-dom";
+import ReactLoading from "react-loading";
 
 function App() {
   const { isAuthenticated, loginWithRedirect, isLoading } = useAuth0();
@@ -21,7 +22,24 @@ function App() {
   }, [isAuthenticated]);
 
   if (isLoading || !shouldRenderRoutes) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          width: "100vw",
+        }}
+      >
+        <ReactLoading
+          type={"bars"}
+          color={"#7fffd4"}
+          height={100}
+          width={100}
+        />
+      </div>
+    );
   }
 
   return (

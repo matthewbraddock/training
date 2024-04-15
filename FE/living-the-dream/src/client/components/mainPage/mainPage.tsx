@@ -15,7 +15,7 @@ import Header from "../header/header";
 import { useAuth0 } from "@auth0/auth0-react";
 import OneToTenQuestionComponent from "../questions/oneToTenQuestion";
 
-export interface MainPageProps { }
+export interface MainPageProps {}
 
 export const MainPage: React.FC<MainPageProps> = () => {
   const { user } = useAuth0();
@@ -36,7 +36,6 @@ export const MainPage: React.FC<MainPageProps> = () => {
 
   const [formState, setFormState] = useState(initialFormState);
 
-
   const navigate = useNavigate();
 
   const [isExploding, setIsExploding] = useState(false);
@@ -51,66 +50,73 @@ export const MainPage: React.FC<MainPageProps> = () => {
   const handleNumberChange = (value: number) => {
     setFormState({
       ...formState,
-      'number': value,
+      number: value,
     });
   };
-
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     console.log(formState);
 
-
     const name = formState.name.toLowerCase();
 
-    const allQuestionsAnswered = Object.entries(formState).every(([key, value]) => {
-      return key === 'name' || (value !== initialFormState[key as keyof typeof initialFormState] && value !== '');
-    });
+    const allQuestionsAnswered = Object.entries(formState).every(
+      ([key, value]) => {
+        return (
+          key === "name" ||
+          (value !== initialFormState[key as keyof typeof initialFormState] &&
+            value !== "")
+        );
+      }
+    );
 
     if (!allQuestionsAnswered) {
       setIsSnackbarOpen(true);
       return;
     }
 
-    const isNameMatthewOrBraddock = name.toLowerCase() === "matthew" || name.toLowerCase() === "braddock";
+    const isNameMatthewOrBraddock = name === "matthew" || name === "braddock";
 
     if (isNameMatthewOrBraddock) {
       setIsExploding(true);
       // Wait for the duration of the confetti explosion before navigating
       setTimeout(() => {
-        navigate("/dream",
-          {
-            state: {
-              braddockSpecial: true,
-            },
-          }
-        );
+        navigate("/dream", {
+          state: {
+            braddockSpecial: true,
+          },
+        });
       }, 1000);
       return;
     } else {
       // Check formState to decide which page to navigate to
-      const isFormStateIncorrect = formState.enjoySaying === 'no' || formState.workedInPortal === 'yes' || formState.goonGoblin === 'no' || formState.number !== 3;
-      console.log('isFormStateIncorrect:', isFormStateIncorrect);
+      const isFormStateIncorrect =
+        formState.enjoySaying === "no" ||
+        formState.workedInPortal === "yes" ||
+        formState.goonGoblin === "no" ||
+        formState.number !== 3;
+      console.log("isFormStateIncorrect:", isFormStateIncorrect);
       if (isFormStateIncorrect) {
         navigate("/nightmare");
       } else {
         setIsExploding(true);
         // Wait for the duration of the confetti explosion before navigating
         setTimeout(() => {
-          navigate("/dream",
-            {
-              state: {
-                braddockSpecial: false,
-              },
-            }
-          );
+          navigate("/dream", {
+            state: {
+              braddockSpecial: false,
+            },
+          });
         }, 1000);
       }
-    };
-  }
+    }
+  };
 
-  const handleSnackbarClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -120,11 +126,7 @@ export const MainPage: React.FC<MainPageProps> = () => {
   return (
     <>
       <Header />
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Box display="flex" justifyContent="center" alignItems="center">
         <Box
           component="form"
           onSubmit={handleSubmit}
@@ -187,7 +189,7 @@ export const MainPage: React.FC<MainPageProps> = () => {
                 open={isSnackbarOpen}
                 autoHideDuration={6000}
                 onClose={handleSnackbarClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
               >
                 <Alert onClose={handleSnackbarClose} severity="error">
                   Please answer all questions before submitting.
