@@ -12,7 +12,7 @@ export const NavBarButtons = () => {
   const showGoBackButton = ['/dream', '/nightmare'].includes(location.pathname);
 
   return (
-    <div className="nav-bar__buttons">
+    <div>
       {!isAuthenticated && (
         <>
           <SignupButton />

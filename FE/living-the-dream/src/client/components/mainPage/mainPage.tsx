@@ -27,6 +27,7 @@ export const MainPage: React.FC<MainPageProps> = () => {
   const firstName = user?.[namespace + "user_metadata"]?.first_name || "";
 
   const initialFormState = {
+    name: "" || user?.given_name || firstName,
     enjoySaying: "",
     workedInPortal: "",
     goonGoblin: "",
@@ -57,9 +58,13 @@ export const MainPage: React.FC<MainPageProps> = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    console.log(formState);
+
+
+    const name = formState.name.toLowerCase();
 
     const allQuestionsAnswered = Object.entries(formState).every(([key, value]) => {
-      return value !== initialFormState[key as keyof typeof initialFormState];
+      return key === 'name' || (value !== initialFormState[key as keyof typeof initialFormState] && value !== '');
     });
 
     if (!allQuestionsAnswered) {
@@ -67,17 +72,42 @@ export const MainPage: React.FC<MainPageProps> = () => {
       return;
     }
 
-    // Check formState to decide which page to navigate to
-    if (formState.enjoySaying === 'no' ?? formState.workedInPortal === 'yes' ?? formState.goonGoblin === 'no' ?? formState.enjoySaying === 'no' ?? formState.number !== 3) {
-      navigate("/nightmare");
-    } else {
+    const isNameMatthewOrBraddock = name.toLowerCase() === "matthew" || name.toLowerCase() === "braddock";
+
+    if (isNameMatthewOrBraddock) {
       setIsExploding(true);
       // Wait for the duration of the confetti explosion before navigating
       setTimeout(() => {
-        navigate("/dream");
+        navigate("/dream",
+          {
+            state: {
+              braddockSpecial: true,
+            },
+          }
+        );
       }, 1000);
-    }
-  };
+      return;
+    } else {
+      // Check formState to decide which page to navigate to
+      const isFormStateIncorrect = formState.enjoySaying === 'no' || formState.workedInPortal === 'yes' || formState.goonGoblin === 'no' || formState.number !== 3;
+      console.log('isFormStateIncorrect:', isFormStateIncorrect);
+      if (isFormStateIncorrect) {
+        navigate("/nightmare");
+      } else {
+        setIsExploding(true);
+        // Wait for the duration of the confetti explosion before navigating
+        setTimeout(() => {
+          navigate("/dream",
+            {
+              state: {
+                braddockSpecial: false,
+              },
+            }
+          );
+        }, 1000);
+      }
+    };
+  }
 
   const handleSnackbarClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -94,7 +124,6 @@ export const MainPage: React.FC<MainPageProps> = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        height="100vh"
       >
         <Box
           component="form"
