@@ -29,7 +29,7 @@ const QuestionComponent: React.FC<QuestionProps> = ({
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
       <Stack>
-        <Typography variant="h6">{question}</Typography>
+        <Typography variant="h5">{question}</Typography>
         <Box width="100%">
           <Grid
             container

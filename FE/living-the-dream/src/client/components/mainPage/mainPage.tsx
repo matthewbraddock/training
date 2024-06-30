@@ -26,6 +26,9 @@ export const MainPage: React.FC<MainPageProps> = () => {
   const namespace = "https://myapp.example.com/claims/";
   const firstName = user?.[namespace + "user_metadata"]?.first_name || "";
 
+  console.log(user);
+  console.log(firstName);
+
   const initialFormState = {
     name: "" || user?.given_name || firstName,
     enjoySaying: "",
